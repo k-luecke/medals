@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Driftbound Labs — Independent Research</title>
+<meta name="description" content="Driftbound Labs LLC is an independent research laboratory working on timing integrity, authentication, and the discipline of making claims that can be checked.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:  #F3F5F4;
+    --ink:    #16211E;
+    --muted:  #5C6B66;
+    --line:   #D6DCD9;
+    --copper: #A4592A;
+    --grid:   rgba(22, 33, 30, 0.045);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    color: var(--ink);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  a { color: var(--copper); text-decoration: none; }
+  a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+  a:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; border-radius: 2px; }
+
+  .mono {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- masthead ---------- */
+  header {
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 22px 0;
+  }
+  .wordmark {
+    font-family: "Archivo", sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+  }
+  .wordmark span { color: var(--copper); }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 96px 0 0; }
+  .hero h1 {
+    font-family: "Archivo", sans-serif;
+    font-weight: 600;
+    font-size: clamp(44px, 8vw, 76px);
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    margin: 18px 0 26px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--copper);
+  }
+  .hero p.lede {
+    font-size: 20px;
+    max-width: 620px;
+    color: var(--ink);
+  }
+
+  /* ---------- signature: drift trace ---------- */
+  .trace {
+    margin: 64px 0 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,0.35);
+  }
+  .trace svg { display: block; width: 100%; height: 120px; }
+  .trace .caption {
+    padding: 8px 0 10px;
+  }
+  #driftPath {
+    stroke: var(--ink);
+    stroke-width: 1.4;
+    fill: none;
+    opacity: 0.85;
+  }
+  .bound {
+    stroke: var(--copper);
+    stroke-width: 1.1;
+    stroke-dasharray: 5 5;
+    fill: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    #driftPath {
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      animation: draw 6s ease-out forwards;
+    }
+    .bound {
+      opacity: 0;
+      animation: fadein 1.6s ease-out 1.2s forwards;
+    }
+  }
+  @keyframes draw   { to { stroke-dashoffset: 0; } }
+  @keyframes fadein { to { opacity: 1; } }
+
+  /* ---------- sections ---------- */
+  section { padding: 80px 0 0; }
+  section:last-of-type { padding-bottom: 96px; }
+
+  .section-label {
+    display: block;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 36px;
+  }
+
+  .area { 
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    padding: 26px 0;
+  }
+  .area + .area { border-top: 1px solid var(--line); }
+  .area h3 {
+    font-family: "Archivo", sans-serif;
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .area .status {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--copper);
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    padding: 3px 8px;
+  }
+  .area p { color: var(--ink); max-width: 560px; }
+
+  /* principles */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .principles div {
+    background: var(--paper);
+    padding: 24px;
+  }
+  .principles strong {
+    font-family: "Archivo", sans-serif;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    font-size: 16px;
+  }
+  .principles p { font-size: 15px; color: var(--muted); }
+
+  /* contact */
+  .contact-card {
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.5);
+    padding: 32px;
+  }
+  .contact-card .addr {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+  }
+  .contact-card p { margin-top: 10px; color: var(--muted); font-size: 15px; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 28px 0 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .area { grid-template-columns: 1fr; gap: 10px; }
+    .principles { grid-template-columns: 1fr; }
+    .hero { padding-top: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap masthead">
+    <div class="wordmark">DRIFTBOUND<span>&nbsp;LABS</span></div>
+    <div class="mono">Independent research</div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <span class="mono">Est. 2026 &middot; Research laboratory</span>
+    <h1>Drift, <em>bounded.</em></h1>
+    <p class="lede">Driftbound Labs is an independent research laboratory working on timing
+    integrity, authentication, and the discipline of making claims that can be checked.</p>
+  </div>
+
+  <!-- signature: a wandering trace held between converging bounds -->
+  <div class="trace" aria-hidden="true">
+    <svg viewBox="0 0 900 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="bound" d="M0,18  C 220,22 500,42 900,52"/>
+      <path class="bound" d="M0,102 C 220,98 500,78 900,68"/>
+      <path id="driftPath" d="M0,60
+        C 20,30 35,95 55,62  C 75,25 90,90 110,58
+        C 130,32 148,88 168,64 C 188,38 205,82 225,60
+        C 245,40 262,80 282,62 C 302,44 320,78 340,60
+        C 360,46 378,74 398,61 C 418,48 436,72 456,60
+        C 476,50 494,70 514,61 C 534,52 552,68 572,60
+        C 592,53 610,67 630,60 C 650,55 668,65 688,60
+        C 708,56 726,64 746,60 C 766,57 784,63 804,60
+        C 824,58 842,62 862,60 C 875,59 888,61 900,60"/>
+    </svg>
+    <div class="wrap caption mono">Fig. 1 &mdash; unverified clock, then constraints applied</div>
+  </div>
+
+  <section id="work">
+    <div class="wrap">
+      <span class="mono section-label">Current work</span>
+
+      <div class="area">
+        <div>
+          <h3>Time integrity from shared geophysical signals</h3>
+          <span class="status">Manuscript in preparation</span>
+        </div>
+        <p>Networked clock synchronization is exposed to delay manipulation that
+        cryptography alone cannot detect. We study hardening synchronization by
+        anchoring time to naturally occurring signals that every node can measure
+        independently &mdash; so a timing claim can be verified against physics
+        rather than trusted to the network.</p>
+      </div>
+
+      <div class="area">
+        <div>
+          <h3>Information-theoretic authentication</h3>
+          <span class="status">Open problem under study</span>
+        </div>
+        <p>Biometric key generation and multi-source fusion, evaluated against
+        formal privacy-leakage bounds rather than heuristic security arguments.
+        Current focus is a characterization problem we consider genuinely open;
+        the work is paused, deliberately, until it is resolved.</p>
+      </div>
+
+      <div class="area">
+        <div>
+          <h3>Research methodology</h3>
+          <span class="status">In continuous use</span>
+        </div>
+        <p>A structured process for locating genuinely open problems: each is
+        framed with demonstrable constraints, a hard floor traced to a theorem or
+        physical bound, and a preregistered confirm / refute / inconclusive
+        decision rule fixed before any measurement is taken.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="principles">
+    <div class="wrap">
+      <span class="mono section-label">How we work</span>
+      <div class="principles">
+        <div>
+          <strong>Preregister before measuring</strong>
+          <p>Decision rules are committed and hashed before experiments run, so outcomes can't be negotiated afterward.</p>
+        </div>
+        <div>
+          <strong>Negative results are results</strong>
+          <p>A refutation under a preregistered rule is a finding, and it gets reported as one.</p>
+        </div>
+        <div>
+          <strong>Claims scale with evidence</strong>
+          <p>Scope is stated plainly. If a limitation exists, it appears in the paper, not in the fine print.</p>
+        </div>
+        <div>
+          <strong>Verify independently</strong>
+          <p>Data, scripts, and deposits are published so any result can be reproduced without asking permission.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <span class="mono section-label">Contact</span>
+      <div class="contact-card">
+        <div class="addr"><a href="mailto:hello@driftboundlabs.com">hello@driftboundlabs.com</a></div>
+        <p>Correspondence regarding research, collaboration, and review is welcome.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span class="mono">&copy; 2026 Driftbound Labs LLC</span>
+    <span class="mono">driftboundlabs.com</span>
+  </div>
+</footer>
+
+</body>
+</html>
